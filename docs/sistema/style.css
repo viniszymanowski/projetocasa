@@ -24,6 +24,12 @@ h1 {
   margin-bottom: 20px;
 }
 
+.subtitle.small {
+  font-size: 0.9rem;
+  margin-top: -4px;
+  margin-bottom: 16px;
+}
+
 .step {
   display: none;
 }
@@ -94,8 +100,4 @@ button:disabled {
   color: #ffffff;
 }
 
-.hint {
-  font-size: 0.85rem;
-  color: #666;
-  margin-top: 8px;
-}
+.hi
