@@ -30,14 +30,6 @@ h1 {
   margin-bottom: 16px;
 }
 
-.step {
-  display: none;
-}
-
-.step.active {
-  display: block;
-}
-
 h2 {
   margin-top: 0;
   font-size: 1.3rem;
@@ -65,13 +57,6 @@ textarea {
   resize: vertical;
 }
 
-.navigation {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 24px;
-}
-
 button {
   padding: 8px 16px;
   border-radius: 6px;
@@ -85,19 +70,67 @@ button:disabled {
   cursor: not-allowed;
 }
 
-#btn-anterior {
-  background: #e0e0e0;
-}
-
-#btn-proximo {
-  background: #0070f3;
-  color: #ffffff;
-}
-
 #btn-exportar {
   margin-top: 16px;
   background: #10b981;
   color: #ffffff;
 }
 
-.hi
+.hint {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 8px;
+}
+
+/* Layout terreno */
+
+.step-terreno {
+  margin-top: 8px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.card {
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 12px 14px 14px;
+  border: 1px solid #e5e7eb;
+}
+
+.card-full {
+  margin-top: 8px;
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 12px 14px 14px;
+  border: 1px solid #e5e7eb;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: #111827;
+}
+
+.step-terreno textarea,
+.step-terreno input[type="text"] {
+  background-color: #ffffff;
+}
+
+@media (max-width: 900px) {
+  .container {
+    margin: 10px;
+    padding: 16px 14px 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+}
