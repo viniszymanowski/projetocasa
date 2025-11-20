@@ -1,0 +1,101 @@
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f4f4f7;
+}
+
+.container {
+  max-width: 900px;
+  margin: 20px auto 40px;
+  padding: 20px 24px 32px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 1.8rem;
+}
+
+.subtitle {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.step {
+  display: none;
+}
+
+.step.active {
+  display: block;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+}
+
+label {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 0.95rem;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 4px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#btn-anterior {
+  background: #e0e0e0;
+}
+
+#btn-proximo {
+  background: #0070f3;
+  color: #ffffff;
+}
+
+#btn-exportar {
+  margin-top: 16px;
+  background: #10b981;
+  color: #ffffff;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 8px;
+}
