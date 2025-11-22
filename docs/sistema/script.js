@@ -1,39 +1,38 @@
-let etapaAtual = 1;
-const totalEtapas = 6;
+// Formulário único de dados do terreno
 
-const passos = document.querySelectorAll(".step");
-const btnAnterior = document.getElementById("btn-anterior");
-const btnProximo = document.getElementById("btn-proximo");
-const indicador = document.getElementById("indicador-etapa");
 const btnExportar = document.getElementById("btn-exportar");
-
-function mostrarEtapa(novaEtapa) {
-  passos.forEach((step) => {
-    const stepNum = parseInt(step.getAttribute("data-step"), 10);
-    step.classList.toggle("active", stepNum === novaEtapa);
-  });
-
-  etapaAtual = novaEtapa;
-  indicador.textContent = `Etapa ${etapaAtual} de ${totalEtapas}`;
-
-  btnAnterior.disabled = etapaAtual === 1;
-  btnProximo.style.display = etapaAtual === totalEtapas ? "none" : "inline-block";
-}
-
-btnAnterior.addEventListener("click", () => {
-  if (etapaAtual > 1) {
-    mostrarEtapa(etapaAtual - 1);
-  }
-});
-
-btnProximo.addEventListener("click", () => {
-  if (etapaAtual < totalEtapas) {
-    mostrarEtapa(etapaAtual + 1);
-  }
-});
 
 if (btnExportar) {
   btnExportar.addEventListener("click", () => {
+    // Campos obrigatórios
+    const requiredFields = [
+      "terreno_dimensoes",
+      "terreno_recuos",
+      "terreno_taxa_ocupacao",
+      "terreno_link_planta",
+    ];
+
+    const missing = [];
+
+    requiredFields.forEach((name) => {
+      const field = document.querySelector(`[name="${name}"]`);
+      if (field && !field.value.trim()) {
+        missing.push(name);
+      }
+    });
+
+    if (missing.length > 0) {
+      alert(
+        "Para exportar os dados do terreno, preencha os campos principais:\n\n" +
+        "- Dimensões básicas do terreno\n" +
+        "- Recuos / restrições\n" +
+        "- Taxa de ocupação / altura (se souber)\n" +
+        "- Link da planta oficial do terreno"
+      );
+      return;
+    }
+
+    // Coletar todos os campos
     const inputs = document.querySelectorAll("input, textarea");
     const respostas = {};
 
@@ -46,8 +45,8 @@ if (btnExportar) {
 
     const json = JSON.stringify(
       {
+        tipo_formulario: "dados_terreno",
         atualizado_em: new Date().toISOString(),
-        etapa_total: totalEtapas,
         respostas,
       },
       null,
@@ -58,15 +57,15 @@ if (btnExportar) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "respostas_questionario.json";
+    a.download = "dados_terreno.json";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    alert("Arquivo JSON gerado. Salve em /data no repositório ou em uma pasta do Google Drive.");
+    alert(
+      "Arquivo JSON de dados do terreno gerado com sucesso.\n\n" +
+      "Salve em /data no repositório ou em uma pasta do Google Drive para ser analisado pela IA."
+    );
   });
 }
-
-// mostrar primeira etapa ao carregar
-mostrarEtapa(1);
