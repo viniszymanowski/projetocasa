@@ -1,8 +1,5 @@
 # Fotos do Terreno
-> Arquivo gerado automaticamente a partir da pasta `fotos/terreno`.
 
-## Novas fotos adicionadas
+Estas são as fotos de referência do terreno. Este é apenas um exemplo inicial – depois vocês podem substituir por fotos reais tiradas no local.
 
-| Arquivo | Descrição |
-|--------|-----------|
-| ![](/{rel_path}) | *(preencher descrição)* |
+![Terreno – vista modelo](../data/Fotos/terreno-modelo.jpg)
