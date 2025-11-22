@@ -260,6 +260,28 @@
       font-weight: 500;
     }
 
+    /* Miniaturas das fotos do terreno */
+    .preview-fotos {
+      margin-top: 6px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .preview-fotos img {
+      width: 28%;
+      min-width: 60px;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 6px 14px rgba(148, 163, 184, 0.5);
+      border: 1px solid #e5e7eb;
+    }
+
+    .preview-fotos-empty {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
     footer {
       margin-top: 26px;
       text-align: center;
@@ -353,6 +375,10 @@
           <a href="../terreno/restricoes.md">Restrições / condomínio</a>
           <a href="../terreno/fotos-terreno.md">Fotos do terreno</a>
         </div>
+
+        <!-- Miniaturas automáticas das fotos do terreno -->
+        <div id="preview-terreno" class="preview-fotos"></div>
+
         <div id="status-terreno" class="status-line"></div>
       </article>
 
@@ -442,62 +468,110 @@
     </footer>
   </div>
 
-  <!-- Script para ler automaticamente data/dados_terreno.json -->
+  <!-- Scripts para ler dados_terreno.json e fotos-terreno.md -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const statusEl = document.getElementById("status-terreno");
-      if (!statusEl) return;
+      const previewEl = document.getElementById("preview-terreno");
 
-      // Texto padrão (caso não haja JSON ainda)
-      statusEl.textContent = "Você ainda pode preencher os dados do terreno pelo questionário.";
-      statusEl.classList.add("status-pendente");
+      /* ---------- STATUS DO TERRENO (dados_terreno.json) ---------- */
 
-      fetch("../data/dados_terreno.json?_=" + Date.now())
-        .then((resp) => {
-          if (!resp.ok) {
-            throw new Error("Sem dados de terreno ainda");
-          }
-          return resp.json();
-        })
-        .then((data) => {
-          const respostas = (data && data.respostas) || {};
+      if (statusEl) {
+        // Texto padrão (caso não haja JSON ainda)
+        statusEl.textContent = "Você ainda pode preencher os dados do terreno pelo questionário.";
+        statusEl.classList.add("status-pendente");
 
-          // Monta um pequeno resumo
-          const partes = [];
-          if (respostas.terreno_dimensoes) {
-            partes.push("Dimensões: " + respostas.terreno_dimensoes);
-          }
-          if (respostas.terreno_recuos) {
-            partes.push("Recuos: " + respostas.terreno_recuos);
-          }
-          if (respostas.terreno_taxa_ocupacao) {
-            partes.push("Taxa de ocupação: " + respostas.terreno_taxa_ocupacao);
-          }
+        fetch("../data/dados_terreno.json?_=" + Date.now())
+          .then((resp) => {
+            if (!resp.ok) {
+              throw new Error("Sem dados de terreno ainda");
+            }
+            return resp.json();
+          })
+          .then((data) => {
+            const respostas = (data && data.respostas) || {};
 
-          let texto = "Dados do terreno preenchidos";
-          if (data.atualizado_em) {
-            try {
-              const dt = new Date(data.atualizado_em);
-              if (!isNaN(dt.getTime())) {
-                const dia = String(dt.getDate()).padStart(2, "0");
-                const mes = String(dt.getMonth() + 1).padStart(2, "0");
-                const ano = dt.getFullYear();
-                texto += " (última atualização em " + dia + "/" + mes + "/" + ano + ")";
-              }
-            } catch (e) { }
-          }
+            const partes = [];
+            if (respostas.terreno_dimensoes) {
+              partes.push("Dimensões: " + respostas.terreno_dimensoes);
+            }
+            if (respostas.terreno_recuos) {
+              partes.push("Recuos: " + respostas.terreno_recuos);
+            }
+            if (respostas.terreno_taxa_ocupacao) {
+              partes.push("Taxa de ocupação: " + respostas.terreno_taxa_ocupacao);
+            }
 
-          if (partes.length) {
-            texto += " · " + partes.join(" · ");
-          }
+            let texto = "Dados do terreno preenchidos";
+            if (data.atualizado_em) {
+              try {
+                const dt = new Date(data.atualizado_em);
+                if (!isNaN(dt.getTime())) {
+                  const dia = String(dt.getDate()).padStart(2, "0");
+                  const mes = String(dt.getMonth() + 1).padStart(2, "0");
+                  const ano = dt.getFullYear();
+                  texto += " (última atualização em " + dia + "/" + mes + "/" + ano + ")";
+                }
+              } catch (e) { }
+            }
 
-          statusEl.textContent = texto;
-          statusEl.classList.remove("status-pendente");
-          statusEl.classList.add("status-ok");
-        })
-        .catch(() => {
-          // mantém o texto padrão
-        });
+            if (partes.length) {
+              texto += " · " + partes.join(" · ");
+            }
+
+            statusEl.textContent = texto;
+            statusEl.classList.remove("status-pendente");
+            statusEl.classList.add("status-ok");
+          })
+          .catch(() => {
+            // mantém o texto padrão
+          });
+      }
+
+      /* ---------- MINIATURAS DAS FOTOS (fotos-terreno.md) ---------- */
+
+      if (previewEl) {
+        const mostrarMensagemVazia = () => {
+          if (!previewEl.innerHTML.trim()) {
+            const span = document.createElement("span");
+            span.textContent = "Adicione fotos do terreno para visualizá-las aqui.";
+            span.className = "preview-fotos-empty";
+            previewEl.appendChild(span);
+          }
+        };
+
+        fetch("../terreno/fotos-terreno.md?_=" + Date.now())
+          .then((resp) => {
+            if (!resp.ok) {
+              throw new Error("Sem arquivo de fotos do terreno ainda");
+            }
+            return resp.text();
+          })
+          .then((md) => {
+            const regex = /!\[[^\]]*\]\(([^)]+)\)/g;
+            const imagens = [];
+            let match;
+            while ((match = regex.exec(md)) !== null) {
+              imagens.push(match[1]);
+              if (imagens.length >= 3) break; // só as 3 primeiras
+            }
+
+            if (!imagens.length) {
+              mostrarMensagemVazia();
+              return;
+            }
+
+            imagens.forEach((src) => {
+              const img = document.createElement("img");
+              img.src = src;
+              img.alt = "Foto do terreno";
+              previewEl.appendChild(img);
+            });
+          })
+          .catch(() => {
+            mostrarMensagemVazia();
+          });
+      }
     });
   </script>
 </body>
