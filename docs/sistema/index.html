@@ -163,7 +163,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
     .card::before {
@@ -223,7 +223,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 6px;
+      margin-top: 4px;
     }
 
     .card-links a {
@@ -242,6 +242,22 @@
       background: #e0e7ff;
       transform: translateY(-1px);
       box-shadow: 0 8px 18px rgba(148, 163, 184, 0.3);
+    }
+
+    .status-line {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .status-ok {
+      color: #059669;
+      font-weight: 600;
+    }
+
+    .status-pendente {
+      color: #b45309;
+      font-weight: 500;
     }
 
     footer {
@@ -289,9 +305,9 @@
         </p>
       </div>
       <div class="hero-actions">
-        <!-- IMPORTANTE: este link pressupõe que você renomeou o questionário antigo para questionario.html -->
+        <!-- Botão do questionário (arquivo questionario.html na mesma pasta) -->
         <a class="btn btn-primary" href="./questionario.html">
-          <span>✏️ Abrir questionário</span>
+          ✏️ Abrir questionário
         </a>
         <a class="btn btn-outline" href="../projeto/evolucao.md">
           📈 Ver evolução
@@ -337,6 +353,7 @@
           <a href="../terreno/restricoes.md">Restrições / condomínio</a>
           <a href="../terreno/fotos-terreno.md">Fotos do terreno</a>
         </div>
+        <div id="status-terreno" class="status-line"></div>
       </article>
 
       <!-- Decisões -->
@@ -424,5 +441,64 @@
         ajustados a qualquer momento conforme o projeto evoluir.</span>
     </footer>
   </div>
+
+  <!-- Script para ler automaticamente data/dados_terreno.json -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const statusEl = document.getElementById("status-terreno");
+      if (!statusEl) return;
+
+      // Texto padrão (caso não haja JSON ainda)
+      statusEl.textContent = "Você ainda pode preencher os dados do terreno pelo questionário.";
+      statusEl.classList.add("status-pendente");
+
+      fetch("../data/dados_terreno.json?_=" + Date.now())
+        .then((resp) => {
+          if (!resp.ok) {
+            throw new Error("Sem dados de terreno ainda");
+          }
+          return resp.json();
+        })
+        .then((data) => {
+          const respostas = (data && data.respostas) || {};
+
+          // Monta um pequeno resumo
+          const partes = [];
+          if (respostas.terreno_dimensoes) {
+            partes.push("Dimensões: " + respostas.terreno_dimensoes);
+          }
+          if (respostas.terreno_recuos) {
+            partes.push("Recuos: " + respostas.terreno_recuos);
+          }
+          if (respostas.terreno_taxa_ocupacao) {
+            partes.push("Taxa de ocupação: " + respostas.terreno_taxa_ocupacao);
+          }
+
+          let texto = "Dados do terreno preenchidos";
+          if (data.atualizado_em) {
+            try {
+              const dt = new Date(data.atualizado_em);
+              if (!isNaN(dt.getTime())) {
+                const dia = String(dt.getDate()).padStart(2, "0");
+                const mes = String(dt.getMonth() + 1).padStart(2, "0");
+                const ano = dt.getFullYear();
+                texto += " (última atualização em " + dia + "/" + mes + "/" + ano + ")";
+              }
+            } catch (e) { }
+          }
+
+          if (partes.length) {
+            texto += " · " + partes.join(" · ");
+          }
+
+          statusEl.textContent = texto;
+          statusEl.classList.remove("status-pendente");
+          statusEl.classList.add("status-ok");
+        })
+        .catch(() => {
+          // mantém o texto padrão
+        });
+    });
+  </script>
 </body>
 </html>
