@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<!-- Biblioteca de lightbox -->
+<link href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/css/lightbox.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/js/lightbox.min.js"></script>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Painel – Projeto Casa 301 m²</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --bg-card: #ffffff;
+      --primary: #2563eb;
+      --primary-soft: #dbeafe;
+      --accent: #10b981;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      --radius-xl: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #e0ecff 0, #f3f4f6 40%, #f9fafb 100%);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .title-block h1 {
+      margin: 0 0 4px;
+      font-size: clamp(1.8rem, 3vw, 2.1rem);
+    }
+
+    .title-block p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.08);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .tag span {
+      font-size: 0.9rem;
+    }
+
+    .hero {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      padding: 16px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-main {
+      flex: 1 1 230px;
+    }
+
+    .hero-main h2 {
+      margin: 0 0 8px;
+      font-size: 1.2rem;
+    }
+
+    .hero-main p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 10px 18px;
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: transform 0.1s ease, box-shadow 0.15s ease,
+        background 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 35px rgba(37, 99, 235, 0.35);
+      background: #1d4ed8;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary-soft);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary-soft);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      padding: 16px 18px 14px;
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 30px rgba(148, 163, 184, 0.12);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right,
+          rgba(59, 130, 246, 0.09),
+          transparent 55%);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 0.98rem;
+    }
+
+    .card-title span.emoji {
+      font-size: 1.2rem;
+    }
+
+    .pill {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .card-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .card-links a {
+      font-size: 0.8rem;
+      text-decoration: none;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #f3f4ff;
+      color: #1e40af;
+      border: 1px solid #e0e7ff;
+      transition: background 0.15s ease, transform 0.1s ease,
+        box-shadow 0.15s ease;
+    }
+
+    .card-links a:hover {
+      background: #e0e7ff;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(148, 163, 184, 0.3);
+    }
+
+    .status-line {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .status-ok {
+      color: #059669;
+      font-weight: 600;
+    }
+
+    .status-pendente {
+      color: #b45309;
+      font-weight: 500;
+    }
+
+    /* Miniaturas das fotos do terreno */
+    .preview-fotos {
+      margin-top: 6px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .preview-fotos img {
+      width: 28%;
+      min-width: 60px;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 6px 14px rgba(148, 163, 184, 0.5);
+      border: 1px solid #e5e7eb;
+    }
+
+    .preview-fotos-empty {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    footer {
+      margin-top: 26px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    footer span {
+      opacity: 0.7;
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .hero-actions {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="title-block">
+        <h1>Projeto Casa 301 m²</h1>
+        <p>Painel para acompanhar persona, terreno, decisões e evolução do projeto.</p>
+      </div>
+      <div class="tag">
+        <span>●</span>
+        <span>Em desenvolvimento</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-main">
+        <h2>Central do Projeto</h2>
+        <p>
+          Use este painel como ponto de partida. A partir daqui vocês acessam o
+          questionário, revisam decisões, veem fotos do terreno e acompanham a
+          evolução da casa.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <!-- Botão do questionário (arquivo questionario.html na mesma pasta) -->
+        <a class="btn btn-primary" href="./questionario.html">
+          ✏️ Abrir questionário
+        </a>
+        <a class="btn btn-outline" href="../projeto/evolucao.md">
+          📈 Ver evolução
+        </a>
+      </div>
+    </section>
+
+    <section class="grid">
+
+      <!-- Persona -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="emoji">👥</span>
+            <span>Persona do projeto</span>
+          </div>
+          <span class="pill">perfil</span>
+        </div>
+        <p>
+          Características do casal, estilo de vida, prioridades e visão do “lar ideal”.
+        </p>
+        <div class="card-links">
+          <a href="../persona/persona.md">Ver persona</a>
+          <a href="../decisoes/ambientes.md">Ambientes desejados</a>
+        </div>
+      </article>
+
+      <!-- Terreno -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="emoji">📐</span>
+            <span>Terreno</span>
+          </div>
+          <span class="pill">base física</span>
+        </div>
+        <p>
+          Informações técnicas do lote, dimensões, restrições e registro fotográfico.
+        </p>
+        <div class="card-links">
+          <a href="../terreno/dimensoes.md">Dimensões</a>
+          <a href="../terreno/implantacao.md">Implantação</a>
+          <a href="../terreno/restricoes.md">Restrições / condomínio</a>
+          <a href="/projetocasa/terreno/fotos-terreno.html" class="chip-link">
+  Fotos do terreno
+</a>
+
+        </div>
+
+        <!-- Miniaturas automáticas das fotos do terreno -->
+        <div id="preview-terreno" class="preview-fotos"></div>
+
+        <div id="status-terreno" class="status-line"></div>
+      </article>
+
+      <!-- Decisões -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="emoji">✅</span>
+            <span>Decisões do projeto</span>
+          </div>
+          <span class="pill">preferências</span>
+        </div>
+        <p>
+          Registro organizado das escolhas de ambientes, acabamentos e tecnologias.
+        </p>
+        <div class="card-links">
+          <a href="../decisoes/ambientes.md">Decisões sobre ambientes</a>
+          <a href="../decisoes/acabamentos.md">Acabamentos</a>
+          <a href="../decisoes/tecnologias.md">Tecnologias</a>
+        </div>
+      </article>
+
+      <!-- Arquitetura -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="emoji">🏛️</span>
+            <span>Arquitetura</span>
+          </div>
+          <span class="pill">conceito</span>
+        </div>
+        <p>
+          Diretrizes de partido, programa de necessidades e materiais de referência
+          para o estilo da casa.
+        </p>
+        <div class="card-links">
+          <a href="../arquitetura/programa-de-necessidades.md">Programa de necessidades</a>
+          <a href="../projeto/resumo-arquitetonico.md">Resumo arquitetônico</a>
+          <a href="../arquitetura/partido-arquitetonico.md">Partido arquitetônico</a>
+        </div>
+      </article>
+
+      <!-- Referências visuais -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="emoji">🎨</span>
+            <span>Referências visuais</span>
+          </div>
+          <span class="pill">estilo</span>
+        </div>
+        <p>
+          Imagens de fachada, interiores e área gourmet que representam o gosto de vocês.
+        </p>
+        <div class="card-links">
+          <a href="../arquitetura/referencias/fachada.md">Referências de fachada</a>
+          <a href="../arquitetura/referencias/interiores.md">Referências de interiores</a>
+          <a href="../arquitetura/referencias/gourmet.md">Área gourmet</a>
+          <a href="../arquitetura/referencias/outros.md">Outras referências</a>
+        </div>
+      </article>
+
+      <!-- Normas e Conformidade -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="emoji">📋</span>
+            <span>Normas & Conformidade</span>
+          </div>
+          <span class="pill">legal</span>
+        </div>
+        <p>
+          Código de obras local, checklist de conformidade e relatórios de validação do projeto.
+        </p>
+        <div class="card-links">
+          <a href="../normas/codigo_de_obras.md">Código de obras</a>
+          <a href="../normas/checklist_conformidade.md">Checklist</a>
+          <a href="../normas/relatorio_conformidade.md">Relatório de conformidade</a>
+          <a href="../normas/resumo_normas_local.md">Resumo das normas</a>
+        </div>
+      </article>
+
+      <!-- Arquivos e links externos -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="emoji">🔗</span>
+            <span>Arquivos & links</span>
+          </div>
+          <span class="pill">suporte</span>
+        </div>
+        <p>
+          Links para pastas do Drive, plantas oficiais, documentos do lote e outros
+          materiais de apoio.
+        </p>
+        <div class="card-links">
+          <a href="../drive_links/gerais.md">Links gerais</a>
+          <a href="../data/respostas_questionario.json">JSON do questionário</a>
+        </div>
+      </article>
+
+    </section>
+
+    <footer>
+      <span>Este painel é um resumo visual. Todos os documentos podem ser
+        ajustados a qualquer momento conforme o projeto evoluir.</span>
+    </footer>
+  </div>
+
+  <!-- Scripts para ler dados_terreno.json e fotos-terreno.md -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const statusEl = document.getElementById("status-terreno");
+      const previewEl = document.getElementById("preview-terreno");
+
+      /* ---------- STATUS DO TERRENO (dados_terreno.json) ---------- */
+
+      if (statusEl) {
+        // Texto padrão (caso não haja JSON ainda)
+        statusEl.textContent = "Você ainda pode preencher os dados do terreno pelo questionário.";
+        statusEl.classList.add("status-pendente");
+
+        fetch("../data/dados_terreno.json?_=" + Date.now())
+          .then((resp) => {
+            if (!resp.ok) {
+              throw new Error("Sem dados de terreno ainda");
+            }
+            return resp.json();
+          })
+          .then((data) => {
+            const respostas = (data && data.respostas) || {};
+
+            const partes = [];
+            if (respostas.terreno_dimensoes) {
+              partes.push("Dimensões: " + respostas.terreno_dimensoes);
+            }
+            if (respostas.terreno_recuos) {
+              partes.push("Recuos: " + respostas.terreno_recuos);
+            }
+            if (respostas.terreno_taxa_ocupacao) {
+              partes.push("Taxa de ocupação: " + respostas.terreno_taxa_ocupacao);
+            }
+
+            let texto = "Dados do terreno preenchidos";
+            if (data.atualizado_em) {
+              try {
+                const dt = new Date(data.atualizado_em);
+                if (!isNaN(dt.getTime())) {
+                  const dia = String(dt.getDate()).padStart(2, "0");
+                  const mes = String(dt.getMonth() + 1).padStart(2, "0");
+                  const ano = dt.getFullYear();
+                  texto += " (última atualização em " + dia + "/" + mes + "/" + ano + ")";
+                }
+              } catch (e) { }
+            }
+
+            if (partes.length) {
+              texto += " · " + partes.join(" · ");
+            }
+
+            statusEl.textContent = texto;
+            statusEl.classList.remove("status-pendente");
+            statusEl.classList.add("status-ok");
+          })
+          .catch(() => {
+            // mantém o texto padrão
+          });
+      }
+
+      /* ---------- MINIATURAS DAS FOTOS (fotos-terreno.md) ---------- */
+
+      if (previewEl) {
+        const mostrarMensagemVazia = () => {
+          if (!previewEl.innerHTML.trim()) {
+            const span = document.createElement("span");
+            span.textContent = "Adicione fotos do terreno para visualizá-las aqui.";
+            span.className = "preview-fotos-empty";
+            previewEl.appendChild(span);
+          }
+        };
+
+        fetch("../terreno/fotos-terreno.md?_=" + Date.now())
+          .then((resp) => {
+            if (!resp.ok) {
+              throw new Error("Sem arquivo de fotos do terreno ainda");
+            }
+            return resp.text();
+          })
+          .then((md) => {
+            const regex = /!\[[^\]]*\]\(([^)]+)\)/g;
+            const imagens = [];
+            let match;
+            while ((match = regex.exec(md)) !== null) {
+              imagens.push(match[1]);
+              if (imagens.length >= 3) break; // só as 3 primeiras
+            }
+
+            if (!imagens.length) {
+              mostrarMensagemVazia();
+              return;
+            }
+
+            imagens.forEach((src) => {
+              const img = document.createElement("img");
+              img.src = src;
+              img.alt = "Foto do terreno";
+              previewEl.appendChild(img);
+            });
+          })
+          .catch(() => {
+            mostrarMensagemVazia();
+          });
+      }
+    });
+  </script>
+</body>
+</html>

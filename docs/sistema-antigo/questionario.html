@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dados do Terreno – Projeto Casa 301 m²</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div style="background:#eff6ff;border-bottom:1px solid #dbeafe;padding:8px 16px;display:flex;align-items:center;gap:8px;">
+    <a href="./index.html"
+       style="text-decoration:none;color:#1d4ed8;font-weight:600;font-size:0.85rem;">
+      ← Voltar ao painel
+    </a>
+    <span style="font-size:0.78rem;color:#6b7280;">
+      Sistema – Projeto Casa 301 m²
+    </span>
+  </div>
+  <!-- resto do conteúdo existente do questionário vem em seguida -->
+
+  <div class="container">
+    <h1>Dados do Terreno – Projeto Casa 301 m²</h1>
+    <p class="subtitle">
+      Preencha as informações abaixo. Este formulário gera um arquivo JSON com
+      os dados técnicos do terreno para uso no projeto.
+    </p>
+
+    <div class="step step-terreno active">
+      <h2>Informações do Terreno (Obrigatórias)</h2>
+      <p class="subtitle small">
+        Essas informações são essenciais para estudo de implantação, volumetria e decisões do projeto.
+      </p>
+
+      <div class="card-grid">
+
+        <div class="card">
+          <h3 class="card-title">1. Dimensões básicas</h3>
+
+          <label>
+            Medidas principais (frente, fundos, laterais, formato do lote):
+            <textarea name="terreno_dimensoes" rows="4" placeholder="Ex.: Frente 12 m, fundos 25 m, lateral direita 24 m, lateral esquerda 26 m, lote retangular."></textarea>
+          </label>
+
+          <label>
+            Desnível do terreno (se houver):
+            <textarea name="terreno_desnivel" rows="3" placeholder="Ex.: quase plano / leve declive para os fundos / outro."></textarea>
+          </label>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">2. Recuos e restrições</h3>
+
+          <label>
+            Recuos frontal, laterais e de fundos:
+            <textarea name="terreno_recuos" rows="3" placeholder="Ex.: frontal 4 m, laterais 1,5 m, fundos 3 m."></textarea>
+          </label>
+
+          <label>
+            Taxa de ocupação e altura máxima permitida:
+            <textarea name="terreno_taxa_ocupacao" rows="3" placeholder="Ex.: 60% de ocupação, 2 pavimentos."></textarea>
+          </label>
+
+          <label>
+            Outras restrições conhecidas (condomínio, bairro, servidões, etc.):
+            <textarea name="terreno_restricoes_observacoes" rows="3"></textarea>
+          </label>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">3. Documentos e plantas</h3>
+
+          <label>
+            Link para a planta oficial do terreno (Drive, GitHub, etc.):
+            <input type="text" name="terreno_link_planta" placeholder="Cole aqui o link da planta do terreno" />
+          </label>
+
+          <label>
+            Link para planta de localização / mapa:
+            <input type="text" name="terreno_link_localizacao" placeholder="Link para mapa ou imagem de localização" />
+          </label>
+
+          <label>
+            Links para fotos do terreno (frente, fundos, laterais):
+            <textarea name="terreno_links_fotos" rows="3" placeholder="Cole aqui os links das fotos salvas no Drive/GitHub."></textarea>
+          </label>
+        </div>
+
+      </div>
+
+      <div class="card card-full">
+        <h3 class="card-title">4. Observações gerais sobre o terreno</h3>
+        <label>
+          Observações adicionais que possam influenciar o projeto:
+          <textarea name="terreno_observacoes_finais" rows="4" placeholder="Ex.: vista importante, vizinho barulhento, poste na frente, árvore preservada, etc."></textarea>
+        </label>
+      </div>
+
+      <button id="btn-exportar">Exportar dados do terreno (JSON)</button>
+      <p class="hint">
+        A exportação só será feita se os campos principais estiverem preenchidos
+        (dimensões, recuos/restrições e link da planta). Depois de exportar,
+        salve o arquivo em <code>/data</code> ou em uma pasta do Google Drive.
+      </p>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
