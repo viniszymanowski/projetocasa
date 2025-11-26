@@ -25,3 +25,21 @@
 - [ ] Commit e push para GitHub
 - [ ] Verificar GitHub Pages atualizado
 - [ ] Documentação de uso das novas funcionalidades
+
+
+## 🔄 Integração com Versão Antiga
+- [x] Extrair código das 11 páginas restantes do GitHub Pages
+- [x] Criar componente de menu lateral/navegação
+- [x] Integrar página Dashboard completa
+- [x] Integrar página Preferências
+- [x] Integrar página Terreno
+- [x] Integrar página Normas
+- [x] Integrar página Galeria
+- [x] Integrar página Questionário
+- [x] Integrar página Meu Projeto
+- [x] Integrar página Moodboard
+- [x] Integrar página Contrato
+- [x] Integrar página Financeiro
+- [x] Integrar página Fornecedores
+- [x] Ajustar rotas no App.tsx
+- [x] Testar navegação entre todas as páginas
