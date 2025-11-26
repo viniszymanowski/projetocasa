@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ProjetoCasa - Sistema Interativo de Gestão</title>
+    <script>
+      // Redireciona para index.html preservando o path
+      const path = window.location.pathname.replace('/projetocasa', '');
+      window.location.replace('/projetocasa/' + (path === '/' ? '' : '#' + path));
+    </script>
+  </head>
+  <body>
+    <div>Redirecionando...</div>
+  </body>
+</html>
