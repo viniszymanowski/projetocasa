@@ -40,6 +40,9 @@ export default function Layout() {
   const [panY, setPanY] = useState(0);
   const [isPanning, setIsPanning] = useState(false);
   const [lastMousePos, setLastMousePos] = useState({ x: 0, y: 0 });
+  
+  // Estados para edição de vértices
+  const [verticeSendoArrastado, setVerticeSendoArrastado] = useState<{ elementoId: string, indice: number } | null>(null);
 
   // Carregar ambientes do localStorage
   useEffect(() => {
@@ -199,15 +202,71 @@ export default function Layout() {
     setZoom(prev => Math.max(0.1, Math.min(5, prev * delta)));
   };
 
+  // Converter coordenadas do mouse para coordenadas do canvas
+  const getCanvasCoords = (e: React.MouseEvent) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+    
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left - panX) / zoom;
+    const y = (e.clientY - rect.top - panY) / zoom;
+    return { x, y };
+  };
+
+  // Verificar se click está próximo de um vértice
+  const encontrarVerticeProximo = (x: number, y: number) => {
+    if (modoEdicao !== 'editar_vertices' || !elementoSelecionado) return null;
+    
+    const elemento = elementos.find(el => el.id === elementoSelecionado);
+    if (!elemento) return null;
+    
+    for (let i = 0; i < elemento.vertices.length; i++) {
+      const v = elemento.vertices[i];
+      const dist = Math.sqrt((x - v.x) ** 2 + (y - v.y) ** 2);
+      if (dist < VERTICE_RAIO * 2 / zoom) {
+        return { elementoId: elemento.id, indice: i };
+      }
+    }
+    return null;
+  };
+
   // Handler de pan (arrastar com botão direito)
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (e.button === 2 || e.ctrlKey) { // Botão direito ou Ctrl+click
+    const coords = getCanvasCoords(e);
+    
+    // Verificar se está clicando em um vértice (modo editar vértices)
+    if (modoEdicao === 'editar_vertices' && e.button === 0) {
+      const vertice = encontrarVerticeProximo(coords.x, coords.y);
+      if (vertice) {
+        setVerticeSendoArrastado(vertice);
+        return;
+      }
+    }
+    
+    // Pan com botão direito ou Ctrl+click
+    if (e.button === 2 || e.ctrlKey) {
       setIsPanning(true);
       setLastMousePos({ x: e.clientX, y: e.clientY });
     }
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    // Arrastar vértice
+    if (verticeSendoArrastado) {
+      const coords = getCanvasCoords(e);
+      
+      setElementos(elementos.map(el => {
+        if (el.id === verticeSendoArrastado.elementoId) {
+          const novosVertices = [...el.vertices];
+          novosVertices[verticeSendoArrastado.indice] = { x: coords.x, y: coords.y };
+          return { ...el, vertices: novosVertices };
+        }
+        return el;
+      }));
+      return;
+    }
+    
+    // Pan
     if (isPanning) {
       const dx = e.clientX - lastMousePos.x;
       const dy = e.clientY - lastMousePos.y;
@@ -219,6 +278,7 @@ export default function Layout() {
 
   const handleMouseUp = () => {
     setIsPanning(false);
+    setVerticeSendoArrastado(null);
   };
 
   // Adicionar ambiente ao layout
@@ -396,7 +456,7 @@ export default function Layout() {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onContextMenu={(e) => e.preventDefault()}
-          style={{ cursor: isPanning ? 'grabbing' : 'default' }}
+          style={{ cursor: isPanning ? 'grabbing' : (verticeSendoArrastado ? 'move' : (modoEdicao === 'editar_vertices' ? 'crosshair' : 'default')) }}
         />
         
         <div style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(0,0,0,0.7)', padding: '10px', borderRadius: '8px', color: 'white' }}>

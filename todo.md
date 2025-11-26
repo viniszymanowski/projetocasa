@@ -43,3 +43,7 @@
 - [x] Integrar página Fornecedores
 - [x] Ajustar rotas no App.tsx
 - [x] Testar navegação entre todas as páginas
+
+
+## 🐛 Bugs Reportados
+- [x] Edição de vértices não está funcionando (arrastar cantos dos ambientes)
