@@ -9,6 +9,12 @@
     <link rel="stylesheet" crossorigin href="./assets/index-Cm4YYhkP.css">
   </head>
   <body>
+    <script>
+      // Redirecionar para #/ se não houver hash
+      if (!window.location.hash) {
+        window.location.hash = '/';
+      }
+    </script>
     <div id="root"></div>
   </body>
 </html>
