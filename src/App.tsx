@@ -14,6 +14,7 @@ import Moodboard from "./pages/Moodboard";
 import Contrato from "./pages/Contrato";
 import Financeiro from "./pages/Financeiro";
 import Fornecedores from "./pages/Fornecedores";
+import Configuracoes from "./pages/Configuracoes";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/contrato" component={Contrato} />
           <Route path="/financeiro" component={Financeiro} />
           <Route path="/fornecedores" component={Fornecedores} />
+          <Route path="/configuracoes" component={Configuracoes} />
           <Route>
             <div style={{ padding: '2rem', textAlign: 'center' }}>
               <h1>404 - Página não encontrada</h1>

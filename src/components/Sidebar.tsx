@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { 
   Home, Users, Heart, MapPin, Building2, Grid3x3, 
   FileText, Image, ClipboardList, FolderOpen, Palette,
-  FileSignature, DollarSign, Truck
+  FileSignature, DollarSign, Truck, Settings
 } from "lucide-react";
 
 const menuItems = [
@@ -20,6 +20,7 @@ const menuItems = [
   { path: "/contrato", label: "Contrato", icon: FileSignature },
   { path: "/financeiro", label: "Financeiro", icon: DollarSign },
   { path: "/fornecedores", label: "Fornecedores", icon: Truck },
+  { path: "/configuracoes", label: "Configurações", icon: Settings },
 ];
 
 export default function Sidebar() {
